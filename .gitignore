@@ -8,3 +8,4 @@ Assets/AssetStoreTools/**
 *.userprefs
 *.csproj
 *.sln
+*.keystore

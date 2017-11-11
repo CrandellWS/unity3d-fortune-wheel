@@ -12,12 +12,14 @@ public class FortuneWheelManager : MonoBehaviour
     private float _startAngle = 0;
     private float _currentLerpRotationTime;
     public Button TurnButton;
+    public Button ExitButton;
     public GameObject Circle; 			// Rotatable Object with rewards
     public Text CoinsDeltaText; 		// Pop-up text with wasted or rewarded coins amount
     public Text CurrentCoinsText; 		// Pop-up text with wasted or rewarded coins amount
     public int TurnCost = 300;			// How much coins user waste when turn whe wheel
     public int CurrentCoinsAmount = 1000;	// Started coins amount. In your project it can be set up from CoinsManager or from PlayerPrefs and so on
     public int PreviousCoinsAmount;		// For wasted coins animation
+    public int PrizeSlices = 12;		// Number of Prize SLices on Wheel Pie
 
     private void Awake ()
     {
@@ -32,7 +34,13 @@ public class FortuneWheelManager : MonoBehaviour
     	    _currentLerpRotationTime = 0f;
     	
     	    // Fill the necessary angles (for example if you want to have 12 sectors you need to fill the angles with 30 degrees step)
-    	    _sectorsAngles = new float[] { 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360 };
+    	    
+    	    // _sectorsAngles = new float[] { 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360 };
+    	    _sectorsAngles = new float[PrizeSlices];
+    	    
+    	    for (int i = 0; i < PrizeSlices; i ++){
+    	      _sectorsAngles[i] = (1 + i)  * (360 / PrizeSlices);
+    	    }
     	
     	    int fullCircles = 5;
     	    float randomFinalAngle = _sectorsAngles [UnityEngine.Random.Range (0, _sectorsAngles.Length)];
@@ -102,6 +110,15 @@ public class FortuneWheelManager : MonoBehaviour
         }
     }
 
+    public void ClickExit()
+    {
+         #if UNITY_EDITOR
+         UnityEditor.EditorApplication.isPlaying = false;
+         #else
+         Application.Quit();
+         #endif 
+    }
+ 
     void Update ()
     {
         // Make turn button non interactable if user has not enough money for the turn
